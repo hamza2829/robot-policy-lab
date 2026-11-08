@@ -81,6 +81,9 @@ Reset seeds choose block x in [-0.10, -0.03] m, block y in [-0.08, 0.08] m,
 target x in [0.17, 0.27] m, and target y within 0.02 m of block y. The pusher starts
 roughly 0.09 m behind the block with small seeded position noise. This deliberately
 restricts the task to mostly forward pushing.
+The expert centers on the rear face and regulates forward motion. Lateral target
+offsets are already within the success radius, so this task does not require
+general two-dimensional block placement.
 
 Both policies use the same two-layer, 64-unit MLP, tanh action bounds, normalized
 observations, Adam optimizer, and demonstration split. The last layer predicts either

@@ -74,9 +74,11 @@ class PushEnv:
 
 
 def expert_action(obs: np.ndarray) -> np.ndarray:
-    """Aim through the block toward the goal; never modify simulator state."""
+    """Push the rear face along x while keeping the pusher centered on the block.
+
+    The task's lateral target offset is smaller than the success radius. A box
+    contact should stay on its rear face rather than rotate around a point goal.
+    """
     arm, block, target = obs[:2], obs[2:4], obs[4:6]
-    delta = target - block
-    direction = delta / max(float(np.linalg.norm(delta)), 1e-8)
-    desired_tip = block - 0.044 * direction + 0.5 * delta
+    desired_tip = np.array([block[0] - 0.044 + 0.5 * (target[0] - block[0]), block[1]])
     return np.clip(12.0 * (desired_tip - arm), -1, 1).astype(np.float32)
