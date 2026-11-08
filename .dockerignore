@@ -1,0 +1,7 @@
+.git
+data
+runs
+artifacts
+reports
+tests
+__pycache__
