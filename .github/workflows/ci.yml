@@ -75,9 +75,22 @@ jobs:
         with:
           name: benchmark-results
           path: artifacts/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: demonstration-dataset
+          path: data/
+
+  docker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t robot-policy-lab .
+      - name: Run packaged model and generate demonstrations
+        run: docker run --rm robot-policy-lab generate-data --output /tmp/data --episodes 2
 
   publish-results:
-    needs: [lint, tests, benchmark]
+    needs: [lint, tests, benchmark, docker]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 5

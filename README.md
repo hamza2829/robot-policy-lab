@@ -135,6 +135,9 @@ and padding masks, train/validation separation, loss reduction, checkpoint reloa
 paired evaluation reproducibility, seed leakage rejection, and all four CLI commands.
 Coverage includes statements and branches with an 85% minimum. The workflow runs
 ruff, tests with JUnit and coverage artifacts, and the short train/evaluate benchmark.
+It also builds the Docker image and generates demonstrations inside the container,
+checking that the packaged XML works in the minimal runtime. Generated Parquet
+datasets are available as a separate workflow artifact.
 Only after these jobs pass does it publish the measured README and raw JSON reports.
 
 ## Limits
