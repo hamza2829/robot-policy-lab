@@ -71,5 +71,5 @@ def test_evaluation_protocol_errors(dataset, tmp_path):
         evaluate(checkpoint, chunk, episodes=1)
     with pytest.raises(ValueError, match="positive"):
         evaluate(episodes=0)
-    assert wilson_interval(0, 100)[0] == 0
-    assert wilson_interval(100, 100)[1] == 1
+    assert wilson_interval(0, 100)[0] == pytest.approx(0)
+    assert wilson_interval(100, 100)[1] == pytest.approx(1)
