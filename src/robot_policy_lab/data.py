@@ -84,7 +84,8 @@ def validate_episode(table: pa.Table) -> list[dict]:
 
 
 def episode_hash(table: pa.Table) -> str:
-    return sha256(canonical_json({"schema_version": SCHEMA_VERSION, "rows": validate_episode(table)}))
+    payload = {"schema_version": SCHEMA_VERSION, "rows": validate_episode(table)}
+    return sha256(canonical_json(payload))
 
 
 def collect_episode(seed: int, env: PushEnv | None = None) -> pa.Table:

@@ -90,7 +90,8 @@ def train(
         initial_loss=initial, final_loss=score(training), validation_loss=score(validation),
         training_rows=len(training), validation_rows=len(validation), history=history,
     )
-    torch.save(dict(state_dict=model.state_dict(), chunk_size=chunk_size, metadata=metadata), output)
+    checkpoint = dict(state_dict=model.state_dict(), chunk_size=chunk_size, metadata=metadata)
+    torch.save(checkpoint, output)
     output.with_suffix(".json").write_text(json.dumps(metadata, indent=2) + "\n")
     return metadata
 

@@ -66,7 +66,8 @@ def evaluate(
                 seed=seed, success=success, steps=env.steps, initial_distance=initial_distance,
                 final_distance=env.distance,
                 failure_reason=None if success else (
-                    "moved_away" if env.distance > initial_distance else "timeout_outside_stable_goal"
+                    "moved_away" if env.distance > initial_distance
+                    else "timeout_outside_stable_goal"
                 ),
             ))
         successes = sum(item["success"] for item in outcomes)
