@@ -30,7 +30,7 @@ def test_rollout_determinism():
     np.testing.assert_array_equal(first, second)
 
 
-@pytest.mark.parametrize("seed", range(12))
+@pytest.mark.parametrize("seed", [*range(12), 16, 21, 42, 124])
 def test_expert_succeeds(seed):
     states, success = rollout(seed)
     assert success, f"expert failed seed {seed}, final delta {states[-1, 8:10]}"

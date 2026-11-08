@@ -65,6 +65,8 @@ def evaluate(
             outcomes.append(dict(
                 seed=seed, success=success, steps=env.steps, initial_distance=initial_distance,
                 final_distance=env.distance,
+                final_block_position=observation[2:4].tolist(),
+                target_position=observation[4:6].tolist(),
                 failure_reason=None if success else (
                     "moved_away" if env.distance > initial_distance
                     else "timeout_outside_stable_goal"
