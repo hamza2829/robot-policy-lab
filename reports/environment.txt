@@ -1,0 +1,18 @@
+absl-py==2.5.1
+etils==1.15.0
+filelock==4.2.4
+fsspec==2026.9.0
+glfw==2.11.0
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+mpmath==1.3.0
+mujoco==3.3.2
+networkx==3.6.1
+numpy==2.2.6
+pyarrow==19.0.1
+PyOpenGL==3.1.10
+-e git+https://github.com/hamza2829/robot-policy-lab@1a85fecf597971194fe81457f5a23aabf2c706b9#egg=robot_policy_lab
+sympy==1.13.1
+torch==2.6.0+cpu
+typing_extensions==4.16.0
+zipp==4.1.2

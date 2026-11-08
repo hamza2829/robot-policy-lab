@@ -27,7 +27,27 @@ flowchart LR
 ## Measured results
 
 <!-- RESULTS:START -->
-Results are pending the first successful GitHub Actions run. No measurements are claimed yet.
+Measured by [GitHub Actions](https://github.com/hamza2829/robot-policy-lab/actions/runs/42524771250) on source commit `1a85fecf597971194fe81457f5a23aabf2c706b9`.
+
+Tests: **63 passed**, no skipped tests. Coverage: **99.09%** (statements and branches combined).
+
+| Policy | Successes / episodes | Success rate | 95% Wilson interval | Mean final error |
+| :--- | ---: | ---: | ---: | ---: |
+| random | 0 / 128 | 0.00% | 0.0% to 2.9% | 0.2742 m |
+| expert | 128 / 128 | 100.00% | 97.1% to 100.0% | 0.0214 m |
+| one_step | 128 / 128 | 100.00% | 97.1% to 100.0% | 0.0213 m |
+| chunked | 128 / 128 | 100.00% | 97.1% to 100.0% | 0.0216 m |
+
+Observed failures (same evaluation seeds for every policy):
+
+- `random`: {'moved_away': 1, 'timeout_outside_stable_goal': 127}. Example seeds: 10000 (0.291 m), 10001 (0.132 m), 10002 (0.281 m), 10003 (0.322 m), 10004 (0.257 m).
+- `expert`: no failures in these 128 episodes.
+- `one_step`: no failures in these 128 episodes.
+- `chunked`: no failures in these 128 episodes.
+
+Full per-seed outcomes, training splits, losses, and coverage totals are in [reports/final.json](reports/final.json). The workflow artifacts also contain checkpoints, JUnit XML, HTML coverage, and the exact dependency environment.
+
+This section and the reports are committed by the workflow after lint, tests, and the benchmark pass. That documentation commit does not trigger another run. The source commit above identifies the code actually measured.
 <!-- RESULTS:END -->
 
 ## Run the pipeline
