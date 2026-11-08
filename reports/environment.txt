@@ -11,7 +11,7 @@ networkx==3.6.1
 numpy==2.2.6
 pyarrow==19.0.1
 PyOpenGL==3.1.10
--e git+https://github.com/hamza2829/robot-policy-lab@1a85fecf597971194fe81457f5a23aabf2c706b9#egg=robot_policy_lab
+-e git+https://github.com/hamza2829/robot-policy-lab@9c81a1fd7e67f05146423d653a586de7c490b5ff#egg=robot_policy_lab
 sympy==1.13.1
 torch==2.6.0+cpu
 typing_extensions==4.16.0

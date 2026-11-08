@@ -27,9 +27,9 @@ flowchart LR
 ## Measured results
 
 <!-- RESULTS:START -->
-Measured by [GitHub Actions](https://github.com/hamza2829/robot-policy-lab/actions/runs/42524771250) on source commit `1a85fecf597971194fe81457f5a23aabf2c706b9`.
+Measured by [GitHub Actions](https://github.com/hamza2829/robot-policy-lab/actions/runs/42524988813) on source commit `9c81a1fd7e67f05146423d653a586de7c490b5ff`.
 
-Tests: **63 passed**, no skipped tests. Coverage: **99.09%** (statements and branches combined).
+Tests: **64 passed**, no skipped tests. Coverage: **99.11%** (statements and branches combined).
 
 | Policy | Successes / episodes | Success rate | 95% Wilson interval | Mean final error |
 | :--- | ---: | ---: | ---: | ---: |
@@ -44,6 +44,22 @@ Observed failures (same evaluation seeds for every policy):
 - `expert`: no failures in these 128 episodes.
 - `one_step`: no failures in these 128 episodes.
 - `chunked`: no failures in these 128 episodes.
+
+Stress evaluation: the initial pusher position is shifted +0.12 m laterally, outside the demonstrations. These 128 separate seeds (20000 through 20127) use the same checkpoints without retraining. Block and target sampling stay unchanged.
+
+| Policy | Stress successes / episodes | Stress success rate |
+| :--- | ---: | ---: |
+| random | 0 / 128 | 0.00% |
+| expert | 0 / 128 | 0.00% |
+| one_step | 0 / 128 | 0.00% |
+| chunked | 0 / 128 | 0.00% |
+
+Observed stress failures:
+
+- `random`: {'moved_away': 3, 'timeout_outside_stable_goal': 125}. Example seeds: 20000 (0.236 m), 20001 (0.361 m), 20002 (0.294 m), 20003 (0.332 m), 20004 (0.226 m).
+- `expert`: {'timeout_outside_stable_goal': 128}. Example seeds: 20000 (0.229 m), 20001 (0.352 m), 20002 (0.279 m), 20003 (0.323 m), 20004 (0.219 m).
+- `one_step`: {'timeout_outside_stable_goal': 128}. Example seeds: 20000 (0.236 m), 20001 (0.361 m), 20002 (0.294 m), 20003 (0.332 m), 20004 (0.226 m).
+- `chunked`: {'timeout_outside_stable_goal': 128}. Example seeds: 20000 (0.236 m), 20001 (0.361 m), 20002 (0.294 m), 20003 (0.332 m), 20004 (0.226 m).
 
 Full per-seed outcomes, training splits, losses, and coverage totals are in [reports/final.json](reports/final.json). The workflow artifacts also contain checkpoints, JUnit XML, HTML coverage, and the exact dependency environment.
 
