@@ -29,6 +29,8 @@ def main(argv: list[str] | None = None) -> int:
     evaluation.add_argument("--chunked", type=Path)
     evaluation.add_argument("--episodes", type=int, default=128)
     evaluation.add_argument("--start-seed", type=int, default=10000)
+    evaluation.add_argument("--lateral-offset", type=float, default=0.0,
+                            help="initial pusher y offset in meters for distribution shift")
     evaluation.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
@@ -42,7 +44,8 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps({key: value for key, value in result.items() if key != "history"}))
         else:
             result = evaluate(
-                args.one_step, args.chunked, args.episodes, args.start_seed, args.output
+                args.one_step, args.chunked, args.episodes, args.start_seed, args.output,
+                args.lateral_offset,
             )
             print(json.dumps({name: {key: val for key, val in item.items() if key != "outcomes"}
                               for name, item in result["policies"].items()}, indent=2))

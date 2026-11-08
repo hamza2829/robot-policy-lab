@@ -7,6 +7,7 @@ from pathlib import Path
 
 root = Path("artifacts")
 evaluation = json.loads((root / "evaluation.json").read_text())
+stress = json.loads((root / "stress_evaluation.json").read_text())
 coverage = json.loads((root / "coverage.json").read_text())["totals"]
 suites = ET.parse(root / "junit.xml").getroot().iter("testsuite")
 counts = {key: 0 for key in ("tests", "failures", "errors", "skipped")}
@@ -17,7 +18,7 @@ assert counts["tests"] and not any(counts[key] for key in ("failures", "errors",
 url = f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
 summary = dict(
     workflow_url=url, source_commit=os.environ["GITHUB_SHA"], tests=counts,
-    coverage=coverage, evaluation=evaluation,
+    coverage=coverage, evaluation=evaluation, stress_evaluation=stress,
 )
 reports = Path("reports")
 reports.mkdir(exist_ok=True)
@@ -48,6 +49,26 @@ for name, item in evaluation["policies"].items():
         lines.append(f"- `{name}`: {item['failure_counts']}. Example seeds: {examples}.")
     else:
         lines.append(f"- `{name}`: no failures in these {item['episodes']} episodes.")
+lines += [
+    "",
+    "Stress evaluation: the initial pusher position is shifted +0.12 m laterally, "
+    "outside the demonstrations. These 128 separate seeds (20000 through 20127) "
+    "use the same checkpoints without retraining. Block and target sampling stay unchanged.",
+    "",
+    "| Policy | Stress successes / episodes | Stress success rate |",
+    "| :--- | ---: | ---: |",
+]
+for name, item in stress["policies"].items():
+    lines.append(f"| {name} | {item['successes']} / {item['episodes']} | "
+                 f"{item['success_rate']:.2%} |")
+lines += ["", "Observed stress failures:", ""]
+for name, item in stress["policies"].items():
+    failed = [row for row in item["outcomes"] if not row["success"]]
+    examples = ", ".join(f"{row['seed']} ({row['final_distance']:.3f} m)" for row in failed[:5])
+    if failed:
+        lines.append(f"- `{name}`: {item['failure_counts']}. Example seeds: {examples}.")
+    else:
+        lines.append(f"- `{name}`: no failures in these {item['episodes']} stress episodes.")
 lines += [
     "",
     "Full per-seed outcomes, training splits, losses, and coverage totals are in "

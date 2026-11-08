@@ -30,6 +30,18 @@ def test_rollout_determinism():
     np.testing.assert_array_equal(first, second)
 
 
+def test_lateral_stress_changes_only_initial_arm_position():
+    baseline = PushEnv().reset(17)
+    stress = PushEnv(lateral_offset=0.12).reset(17)
+    assert stress[1] - baseline[1] == pytest.approx(0.12)
+    np.testing.assert_array_equal(stress[2:6], baseline[2:6])
+    np.testing.assert_array_equal(stress, PushEnv(lateral_offset=0.12).reset(17))
+    with pytest.raises(ValueError, match="lateral_offset"):
+        PushEnv(lateral_offset=float("nan"))
+    with pytest.raises(ValueError, match="lateral_offset"):
+        PushEnv(lateral_offset=0.16)
+
+
 @pytest.mark.parametrize("seed", [*range(12), 16, 21, 42, 124])
 def test_expert_succeeds(seed):
     states, success = rollout(seed)

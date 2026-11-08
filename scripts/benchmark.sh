@@ -8,6 +8,8 @@ robot-policy-lab train "$DATASET" --output artifacts/one_step.pt --chunk-size 1 
 robot-policy-lab train "$DATASET" --output artifacts/chunked.pt --chunk-size 4 --epochs 50
 robot-policy-lab evaluate --one-step artifacts/one_step.pt --chunked artifacts/chunked.pt \
   --episodes 128 --start-seed 10000 --output artifacts/evaluation.json
+robot-policy-lab evaluate --one-step artifacts/one_step.pt --chunked artifacts/chunked.pt \
+  --episodes 128 --start-seed 20000 --lateral-offset 0.12 --output artifacts/stress_evaluation.json
 python -m pip freeze > artifacts/environment.txt
 python - <<'PY'
 import json

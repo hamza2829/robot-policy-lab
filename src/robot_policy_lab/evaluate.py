@@ -23,6 +23,7 @@ def wilson_interval(successes: int, total: int) -> list[float]:
 def evaluate(
     one_step: Path | None = None, chunked: Path | None = None,
     episodes: int = 128, start_seed: int = 10000, output: Path | None = None,
+    lateral_offset: float = 0.0,
 ) -> dict:
     if episodes < 1 or start_seed < 0:
         raise ValueError("episodes must be positive and start_seed nonnegative")
@@ -42,7 +43,7 @@ def evaluate(
             raise ValueError("evaluation seeds overlap training or validation episodes")
     if len({item["dataset_version"] for item in metadata.values()}) > 1:
         raise ValueError("comparison checkpoints must use the same dataset version")
-    env = PushEnv()
+    env = PushEnv(lateral_offset=lateral_offset)
     results = {}
     for name in ["random", "expert", *models]:
         outcomes = []
@@ -86,6 +87,7 @@ def evaluate(
         )
     report = dict(
         start_seed=start_seed, episodes=episodes, policies=results,
+        initial_lateral_offset_m=lateral_offset,
         checkpoints={name: {key: value for key, value in item.items() if key != "history"}
                      for name, item in metadata.items()},
         protocol="shared held-out seeds; execute all K actions before observing again; CPU",

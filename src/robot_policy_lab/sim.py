@@ -18,12 +18,15 @@ class PushEnv:
     target minus block xy, arm velocity xy. Actions are normalized velocities.
     """
 
-    def __init__(self, horizon: int = HORIZON):
+    def __init__(self, horizon: int = HORIZON, lateral_offset: float = 0.0):
         if horizon < 1:
             raise ValueError("horizon must be positive")
+        if not np.isfinite(lateral_offset) or abs(lateral_offset) > 0.15:
+            raise ValueError("lateral_offset must be finite and within [-0.15, 0.15] m")
         self.model = mujoco.MjModel.from_xml_path(str(Path(__file__).parent / "models/push.xml"))
         self.data = mujoco.MjData(self.model)
         self.horizon = horizon
+        self.lateral_offset = lateral_offset
         self.target = np.zeros(2)
         self.steps = 0
         self.stable_steps = 0
@@ -37,6 +40,7 @@ class PushEnv:
         direction = self.target - block
         direction /= np.linalg.norm(direction)
         self.data.qpos[:2] = block - 0.09 * direction + rng.uniform(-0.008, 0.008, 2)
+        self.data.qpos[1] += self.lateral_offset
         self.data.qpos[2:4] = block
         self.model.site_pos[0, :2] = self.target
         mujoco.mj_forward(self.model, self.data)

@@ -47,6 +47,9 @@ def test_evaluation_smoke_determinism_and_raw_results(dataset, tmp_path):
     assert json.loads(output.read_text()) == report
     assert set(report["policies"]) == {"expert", "random", "one_step", "chunked"}
     assert report["policies"]["expert"]["successes"] == 3
+    stress = evaluate(one, chunk, episodes=2, start_seed=20000, lateral_offset=0.12)
+    assert stress["initial_lateral_offset_m"] == 0.12
+    assert len(stress["policies"]["chunked"]["outcomes"]) == 2
     for item in report["policies"].values():
         assert len(item["outcomes"]) == 3
         assert item["success_rate"] == item["successes"] / 3

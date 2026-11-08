@@ -67,6 +67,8 @@ robot-policy-lab train "$DATASET" --output runs/one.pt --chunk-size 1 --epochs 5
 robot-policy-lab train "$DATASET" --output runs/chunk.pt --chunk-size 4 --epochs 50
 robot-policy-lab evaluate --one-step runs/one.pt --chunked runs/chunk.pt \
   --episodes 128 --start-seed 10000 --output runs/evaluation.json
+robot-policy-lab evaluate --one-step runs/one.pt --chunked runs/chunk.pt \
+  --episodes 128 --start-seed 20000 --lateral-offset 0.12 --output runs/stress.json
 
 ruff check .
 pytest --cov --cov-report=term-missing
@@ -81,6 +83,9 @@ and failure category. Evaluation rejects seeds used in training or validation.
 Use **Actions > Robot policy CI > Run workflow** for a complete remote run. The CI
 benchmark uses 128 generated episodes, 50 epochs per learned policy, and 128 evaluation
 episodes per policy. Jobs have bounded timeouts and use one CPU thread for PyTorch.
+It also evaluates 128 separate stress seeds with a +0.12 m initial lateral pusher
+offset, using the same checkpoints without retraining. This exposes behavior outside
+the demonstration start positions and is reported separately from nominal success.
 No renderer, GPU, display server, or MuJoCo viewer is initialized.
 
 ```bash
